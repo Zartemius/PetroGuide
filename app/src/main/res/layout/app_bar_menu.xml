@@ -4,8 +4,38 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
         tools:context=".MenuActivity">
 
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar_menu__app_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:layout_constraintBottom_toTopOf="@+id/app_bar_menu__fragments"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
+            <android.support.v7.widget.Toolbar
+                    android:id="@+id/app_bar_menu__toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:background="@color/colorPrimary"
+                    app:popupTheme="@style/AppTheme.PopupOverlay"
+                    app:titleTextColor="@color/white"/>
+
+        </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+            android:id="@+id/app_bar_menu__fragments"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/app_bar_menu__app_bar_layout">
+    </FrameLayout>
 
 </android.support.constraint.ConstraintLayout>
