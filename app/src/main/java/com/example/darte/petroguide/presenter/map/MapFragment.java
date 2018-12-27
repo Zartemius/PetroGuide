@@ -1,22 +1,36 @@
 package com.example.darte.petroguide.presenter.map;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.example.darte.petroguide.R;
 import com.google.android.gms.maps.*;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback {
+import java.util.List;
+
+public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragmentView {
 
     private GoogleMap mMap;
     private MapView mMapView;
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
+    MapPresenter mapPresenter = new MapPresenter();
+    private static final int REQ_CODE = 111;
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -56,12 +70,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onResume() {
         super.onResume();
         mMapView.onResume();
+        mapPresenter.subscribe(this);
     }
 
     @Override
     public void onStart() {
         super.onStart();
         mMapView.onStart();
+        checkRequestPermission();
     }
 
     @Override
@@ -74,6 +90,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onPause() {
         super.onPause();
         mMapView.onPause();
+        mapPresenter.unsubscribe();
     }
 
     @Override
@@ -90,22 +107,49 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        Log.i("MAP", "DOES WORK");
         mMap = googleMap;
-        mMap.setMinZoomPreference(12);
+        mapPresenter.onMapReady();
+
         //mMap.setMyLocationEnabled(true);
 
-        LatLng building = new LatLng(59.96980441,30.30065453);
+        //mMap.setMinZoomPreference(12);
+
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.setMinZoomPreference(11);
+
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                callBottomSheet();
+            }
+        });
+
+        /*LatLng building = new LatLng(59.96980441,30.30065453);
         LatLng buildingTwo = new LatLng(59.96595386,30.3096571);
 
+        Marker buildingByTheRiver = mMap.addMarker( new MarkerOptions().position(building)
+                .title("building")
+                .snippet("Доходный дом на набережной р.Карповки. " + "/n"+
+                        "Узнать больше...")
+                .icon(BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.marker)))
+                .rotation(20)
+                .draggable(false));
 
-        MarkerOptions markerOptions = new MarkerOptions();
-        MarkerOptions markerOptions1 = new MarkerOptions();
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                Toast.makeText(getActivity(), R.string.app_name,Toast.LENGTH_SHORT).show();
+            }
+        });
 
-        markerOptions.position(building);
-        markerOptions1.position(buildingTwo);
+        buildingByTheRiver.showInfoWindow();
 
-        mMap.addMarker(markerOptions);
-        mMap.addMarker(markerOptions1);
+        mMap.addMarker(new MarkerOptions().position(buildingTwo)
+                .title("building")
+                .icon(BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.marker)))
+                .rotation(20)
+                .draggable(false));*/
 
         /*UiSettings uiSettings = mMap.getUiSettings();
         uiSettings.setRotateGesturesEnabled(true);
@@ -113,7 +157,62 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         uiSettings.setTiltGesturesEnabled(true);
         uiSettings.setZoomGesturesEnabled(true);*/
 
-        LatLng spb = new LatLng(59.9386300,30.3141300);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(spb));
+
+
+        /*LatLng spb = new LatLng(59.9386300,30.3141300);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(buildingTwo));*/
+    }
+
+    Bitmap getBitmap(int drawable){
+        Drawable myDrawable = getResources().getDrawable(drawable);
+        Canvas canvas = new Canvas();
+        Bitmap bitmap = Bitmap.createBitmap(150,150,Bitmap.Config.ARGB_8888);
+        canvas.setBitmap(bitmap);
+        myDrawable.setBounds(0,0,150,150);
+        myDrawable.draw(canvas);
+
+        return bitmap;
+    }
+
+    @Override
+    public void loadDataInMap(List<LatLng> listOfCoordinats) {
+        for(LatLng i: listOfCoordinats){
+            createMap(i);
+        }
+
+    }
+
+    private void createMap(LatLng latLng){
+        LatLng building = latLng;
+
+        mMap.addMarker( new MarkerOptions().position(building)
+                .title("building")
+                .snippet("some place")
+                .icon(BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.marker)))
+                .rotation(20)
+                .draggable(false));
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(building));
+    }
+
+
+    private void checkRequestPermission() {
+        if(getActivity() != null) {
+            if (ContextCompat.checkSelfPermission(
+                    getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermission();
+            }
+        }
+    }
+
+    private void requestPermission(){
+        if(getActivity() != null) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQ_CODE);
+        }
+    }
+
+    private void callBottomSheet(){
+        BottomSheet bottomSheet = new BottomSheet();
+        bottomSheet.show(getActivity().getSupportFragmentManager(),"bottomSheet");
     }
 }
