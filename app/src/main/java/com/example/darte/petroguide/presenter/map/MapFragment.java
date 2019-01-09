@@ -21,6 +21,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -210,6 +211,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQ_CODE);
         }
     }
+
 
     private void callBottomSheet(){
         BottomSheet bottomSheet = new BottomSheet();
