@@ -39,8 +39,8 @@ dependencies {
     implementation 'com.google.dagger:dagger-android-support:2.16'
     annotationProcessor 'com.google.dagger:dagger-android-processor:2.16'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.16'
-    //implementation 'com.google.firebase:firebase-core:16.0.6'
-    //implementation 'com.google.firebase:firebase-firestore:17.1.5'
+    implementation 'com.google.firebase:firebase-core:16.0.6'
+    implementation 'com.google.firebase:firebase-firestore:17.1.5'
 }
 
-//apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.gms.google-services'

@@ -28,10 +28,10 @@ import java.util.List;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragmentView {
 
+    @Inject MapPresenter mapPresenter;
     private GoogleMap mMap;
     private MapView mMapView;
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
-    @Inject MapPresenter mapPresenter;
     private static final int REQ_CODE = 111;
 
     @Override
@@ -61,12 +61,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
         initializeMap(view,mapViewBundle);
 
         return view;
-    }
-
-    private void initializeMap(View view,Bundle mapViewBundle){
-        mMapView = view.findViewById(R.id.map_fragment__map_view);
-        mMapView.onCreate(mapViewBundle);
-        mMapView.getMapAsync(this);
     }
 
     @Override
@@ -105,6 +99,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
     public void onLowMemory() {
         super.onLowMemory();
         mMapView.onLowMemory();
+    }
+
+    private void initializeMap(View view,Bundle mapViewBundle){
+        mMapView = view.findViewById(R.id.map_fragment__map_view);
+        mMapView.onCreate(mapViewBundle);
+        mMapView.getMapAsync(this);
     }
 
     @Override

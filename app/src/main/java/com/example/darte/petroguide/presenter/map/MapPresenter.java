@@ -47,5 +47,4 @@ public class MapPresenter {
     void callSheetWithShortInfoAboutPoint(){
         mapFragmentView.callBottomSheet();
     }
-
 }
