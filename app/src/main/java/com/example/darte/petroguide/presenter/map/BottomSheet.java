@@ -11,7 +11,6 @@ import com.example.darte.petroguide.R;
 
 public class BottomSheet extends BottomSheetDialogFragment {
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

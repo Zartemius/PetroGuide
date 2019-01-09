@@ -1,16 +1,20 @@
 package com.example.darte.petroguide.presenter.map;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class MapPresenter {
+public class MapPresenter {
 
     private MapFragmentView mapFragmentView = null;
 
     void subscribe(MapFragmentView view){
         mapFragmentView = view;
+        mapFragmentView.checkPermissionForGettingUserLocation();
     }
 
     void unsubscribe(){
@@ -39,4 +43,9 @@ class MapPresenter {
 
         mapFragmentView.loadDataInMap(list);
     }
+
+    void callSheetWithShortInfoAboutPoint(){
+        mapFragmentView.callBottomSheet();
+    }
+
 }

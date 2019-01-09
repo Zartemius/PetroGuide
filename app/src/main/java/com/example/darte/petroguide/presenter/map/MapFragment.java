@@ -16,13 +16,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.example.darte.petroguide.R;
+import com.example.darte.petroguide.presenter.PGApplication;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import org.jetbrains.annotations.NotNull;
 
+import javax.inject.Inject;
 import java.util.List;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragmentView {
@@ -30,7 +31,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
     private GoogleMap mMap;
     private MapView mMapView;
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
-    MapPresenter mapPresenter = new MapPresenter();
+    @Inject MapPresenter mapPresenter;
     private static final int REQ_CODE = 111;
 
     @Override
@@ -50,6 +51,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.map_fragment,container,false);
 
+        ((PGApplication) getActivity().getApplication()).getAppComponent().inject(this);
+
         Bundle mapViewBundle = null;
         if(savedInstanceState != null){
             mapViewBundle = savedInstanceState.getBundle(MAP_VIEW_BUNDLE_KEY);
@@ -58,7 +61,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
         initializeMap(view,mapViewBundle);
 
         return view;
-
     }
 
     private void initializeMap(View view,Bundle mapViewBundle){
@@ -78,7 +80,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
     public void onStart() {
         super.onStart();
         mMapView.onStart();
-        checkRequestPermission();
     }
 
     @Override
@@ -122,7 +123,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                callBottomSheet();
+                mapPresenter.callSheetWithShortInfoAboutPoint();
             }
         });
 
@@ -133,7 +134,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
                 .title("building")
                 .snippet("Доходный дом на набережной р.Карповки. " + "/n"+
                         "Узнать больше...")
-                .icon(BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.marker)))
+                .icon(BitmapDescriptorFactory.fromBitmap(convertImageToBitmap(R.drawable.marker)))
                 .rotation(20)
                 .draggable(false));
 
@@ -148,7 +149,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
 
         mMap.addMarker(new MarkerOptions().position(buildingTwo)
                 .title("building")
-                .icon(BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.marker)))
+                .icon(BitmapDescriptorFactory.fromBitmap(convertImageToBitmap(R.drawable.marker)))
                 .rotation(20)
                 .draggable(false));*/
 
@@ -164,7 +165,28 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
         mMap.moveCamera(CameraUpdateFactory.newLatLng(buildingTwo));*/
     }
 
-    Bitmap getBitmap(int drawable){
+
+    @Override
+    public void loadDataInMap(List<LatLng> listOfCoordinats) {
+        for(LatLng i: listOfCoordinats){
+            createMap(i);
+        }
+    }
+
+    private void createMap(LatLng latLng){
+        LatLng building = latLng;
+
+        mMap.addMarker( new MarkerOptions().position(building)
+                .title("building")
+                .snippet("some place")
+                .icon(BitmapDescriptorFactory.fromBitmap(convertImageToBitmap(R.drawable.marker)))
+                .rotation(20)
+                .draggable(false));
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(building));
+    }
+
+    private Bitmap convertImageToBitmap(int drawable){
         Drawable myDrawable = getResources().getDrawable(drawable);
         Canvas canvas = new Canvas();
         Bitmap bitmap = Bitmap.createBitmap(150,150,Bitmap.Config.ARGB_8888);
@@ -176,28 +198,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
     }
 
     @Override
-    public void loadDataInMap(List<LatLng> listOfCoordinats) {
-        for(LatLng i: listOfCoordinats){
-            createMap(i);
-        }
-
-    }
-
-    private void createMap(LatLng latLng){
-        LatLng building = latLng;
-
-        mMap.addMarker( new MarkerOptions().position(building)
-                .title("building")
-                .snippet("some place")
-                .icon(BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.marker)))
-                .rotation(20)
-                .draggable(false));
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(building));
-    }
-
-
-    private void checkRequestPermission() {
+    public void checkPermissionForGettingUserLocation() {
         if(getActivity() != null) {
             if (ContextCompat.checkSelfPermission(
                     getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -212,9 +213,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
         }
     }
 
-
-    private void callBottomSheet(){
+    @Override
+    public void callBottomSheet(){
         BottomSheet bottomSheet = new BottomSheet();
-        bottomSheet.show(getActivity().getSupportFragmentManager(),"bottomSheet");
+        try {
+            bottomSheet.show(getActivity().getSupportFragmentManager(), "bottomSheet");
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
     }
 }
