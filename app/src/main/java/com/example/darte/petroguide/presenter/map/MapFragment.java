@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.example.darte.petroguide.R;
 import com.example.darte.petroguide.presenter.PGApplication;
+import com.example.darte.petroguide.presenter.domain.model.Place;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
