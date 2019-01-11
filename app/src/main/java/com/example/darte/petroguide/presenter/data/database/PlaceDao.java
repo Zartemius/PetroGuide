@@ -4,6 +4,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import com.example.darte.petroguide.presenter.domain.model.Place;
+import io.reactivex.Single;
 
 import java.util.List;
 
@@ -14,6 +15,5 @@ public interface PlaceDao  {
     List<Place> getAllPlaces();
 
     @Insert
-    void insert(Place place);
-
+    Single<Long> insert(Place place);
 }
