@@ -1,15 +1,14 @@
 package com.example.darte.petroguide.presenter.domain.model;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
-import com.google.android.gms.maps.model.LatLng;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 import org.jetbrains.annotations.NotNull;
 
 @Entity(tableName = "places")
 public class Place {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey()
     @NotNull
     @ColumnInfo(name="unique_id")
     private String uniqueId;
@@ -20,8 +19,11 @@ public class Place {
     @ColumnInfo(name="description")
     private String description;
 
-    @ColumnInfo(name="location")
-    private LatLng location;
+    @ColumnInfo(name="latitude")
+    private double latitude;
+
+    @ColumnInfo(name="longitude")
+    private double longitude;
 
     @ColumnInfo(name="address")
     private String address;
@@ -54,12 +56,20 @@ public class Place {
         this.description = description;
     }
 
-    public LatLng getLocation() {
-        return location;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setLocation(LatLng location) {
-        this.location = location;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public String getAddress() {

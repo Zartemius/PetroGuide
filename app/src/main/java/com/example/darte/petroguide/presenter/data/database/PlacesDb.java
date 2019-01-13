@@ -7,17 +7,20 @@ import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
 
+import javax.inject.Inject;
 import java.util.List;
 
 public class PlacesDb implements PlacesRepository {
 
     private PlaceDao mPlaceDao;
 
-    public PlacesDb(Application application){
-        AppDataBase appDataBase = AppDataBase.getDataBase(application);
-        mPlaceDao = appDataBase.placeDao();
-
+    @Inject
+    public PlacesDb(PlaceDao placeDao){
+        mPlaceDao = placeDao;
     }
 
     @Override

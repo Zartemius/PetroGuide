@@ -6,18 +6,18 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.example.darte.petroguide.R;
 import com.example.darte.petroguide.presenter.PGApplication;
-import com.example.darte.petroguide.presenter.domain.model.Place;
+import com.example.darte.petroguide.presenter.data.DbSynchronization;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -30,6 +30,8 @@ import java.util.List;
 public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragmentView {
 
     @Inject MapPresenter mapPresenter;
+    @Inject
+    DbSynchronization dbSynchronization;
     private GoogleMap mMap;
     private MapView mMapView;
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
@@ -60,6 +62,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
         }
 
         initializeMap(view,mapViewBundle);
+
+        if(dbSynchronization != null) {
+            dbSynchronization.synchronizeDb();
+        }
 
         return view;
     }
