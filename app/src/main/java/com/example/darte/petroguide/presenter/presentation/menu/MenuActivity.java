@@ -1,4 +1,4 @@
-package com.example.darte.petroguide.presenter.menu;
+package com.example.darte.petroguide.presenter.presentation.menu;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 import com.example.darte.petroguide.R;
-import com.example.darte.petroguide.presenter.map.MapFragment;
+import com.example.darte.petroguide.presenter.presentation.mapscreen.MapFragment;
 
 public class MenuActivity extends AppCompatActivity {
 

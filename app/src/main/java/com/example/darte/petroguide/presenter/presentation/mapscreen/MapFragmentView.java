@@ -1,7 +1,5 @@
-package com.example.darte.petroguide.presenter.map;
+package com.example.darte.petroguide.presenter.presentation.mapscreen;
 
-import android.os.Bundle;
-import android.view.View;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;

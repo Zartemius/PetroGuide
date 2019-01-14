@@ -20,7 +20,7 @@
                 android:name="com.google.android.geo.API_KEY"
                 android:value="AIzaSyAC-ajiX-oizorQ9JGndslwu0VGm7Qu8Zk"/>
 
-        <activity android:name=".presenter.SplashActivity"
+        <activity android:name=".presenter.presentation.splashscreen.SplashActivity"
                   android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".presenter.menu.MenuActivity"
+        <activity android:name=".presenter.presentation.menu.MenuActivity"
                   android:theme="@style/AppThemeTranslucentStatus">
         </activity>
     </application>

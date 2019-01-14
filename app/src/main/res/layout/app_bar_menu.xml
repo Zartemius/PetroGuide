@@ -6,7 +6,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
-        tools:context=".presenter.menu.MenuActivity">
+        tools:context=".presenter.presentation.menu.MenuActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar_menu__app_bar_layout"

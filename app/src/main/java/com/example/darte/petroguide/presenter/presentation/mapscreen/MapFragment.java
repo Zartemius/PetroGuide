@@ -1,4 +1,4 @@
-package com.example.darte.petroguide.presenter.map;
+package com.example.darte.petroguide.presenter.presentation.mapscreen;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -17,7 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.example.darte.petroguide.R;
 import com.example.darte.petroguide.presenter.PGApplication;
-import com.example.darte.petroguide.presenter.data.DbSynchronization;
+import com.example.darte.petroguide.presenter.domain.interactor.DbSynchronization;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -29,9 +29,9 @@ import java.util.List;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragmentView {
 
-    @Inject MapPresenter mapPresenter;
     @Inject
-    DbSynchronization dbSynchronization;
+    MapPresenter mapPresenter;
+
     private GoogleMap mMap;
     private MapView mMapView;
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
@@ -62,10 +62,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
         }
 
         initializeMap(view,mapViewBundle);
-
-        if(dbSynchronization != null) {
-            dbSynchronization.synchronizeDb();
-        }
 
         return view;
     }

@@ -1,10 +1,8 @@
-package com.example.darte.petroguide.presenter.data.database;
+package com.example.darte.petroguide.presenter.data.appdatabase;
 
 
 import androidx.room.Database;
-import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import android.content.Context;
 import com.example.darte.petroguide.presenter.domain.model.Place;
 
 @Database(entities = {Place.class}, version = 1)

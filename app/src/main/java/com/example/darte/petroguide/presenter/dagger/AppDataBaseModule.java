@@ -1,9 +1,8 @@
 package com.example.darte.petroguide.presenter.dagger;
 
-import android.app.Application;
 import android.content.Context;
 import androidx.room.Room;
-import com.example.darte.petroguide.presenter.data.database.AppDataBase;
+import com.example.darte.petroguide.presenter.data.appdatabase.AppDataBase;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;

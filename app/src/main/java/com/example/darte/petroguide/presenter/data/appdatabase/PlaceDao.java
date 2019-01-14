@@ -1,4 +1,4 @@
-package com.example.darte.petroguide.presenter.data.database;
+package com.example.darte.petroguide.presenter.data.appdatabase;
 
 import androidx.room.Dao;
 import androidx.room.Insert;

@@ -1,8 +1,5 @@
-package com.example.darte.petroguide.presenter.map;
+package com.example.darte.petroguide.presenter.presentation.mapscreen;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;

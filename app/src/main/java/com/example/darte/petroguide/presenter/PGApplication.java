@@ -8,13 +8,11 @@ import com.example.darte.petroguide.presenter.dagger.DaggerAppComponent;
 
 public class PGApplication extends Application {
 
-    AppComponent appComponent;
-    private static Application application;
+    private AppComponent appComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        PGApplication.application= this;
 
         appComponent = initDagger(this);
     }
@@ -23,10 +21,6 @@ public class PGApplication extends Application {
         return DaggerAppComponent.builder()
                     .appModule(new AppModule(app))
                     .build();
-    }
-
-    public static Application getApp(){
-        return application;
     }
 
     public AppComponent getAppComponent() {
