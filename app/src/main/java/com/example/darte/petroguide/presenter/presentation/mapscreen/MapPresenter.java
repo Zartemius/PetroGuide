@@ -1,11 +1,26 @@
 package com.example.darte.petroguide.presenter.presentation.mapscreen;
 
+import android.util.Log;
+import com.example.darte.petroguide.presenter.domain.interactor.PlacesLoading;
+import com.example.darte.petroguide.presenter.domain.model.Place;
 import com.google.android.gms.maps.model.LatLng;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MapPresenter {
+
+    private PlacesLoading mPlacesLoading;
+    private Disposable mDisposable;
+
+    @Inject
+    public MapPresenter(PlacesLoading placesLoading){
+        mPlacesLoading = placesLoading;
+    }
 
     private MapFragmentView mapFragmentView = null;
 
@@ -16,6 +31,7 @@ public class MapPresenter {
 
     void unsubscribe(){
         mapFragmentView = null;
+        mDisposable = null;
     }
 
     void onMapReady(){
@@ -43,5 +59,15 @@ public class MapPresenter {
 
     void callSheetWithShortInfoAboutPoint(){
         mapFragmentView.callBottomSheet();
+    }
+
+    void loadPlacesToMap(){
+        mDisposable = mPlacesLoading.getPlaces().observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<Place>>() {
+            @Override
+            public void accept(List<Place> places) throws Exception {
+
+            }
+        });
     }
 }

@@ -18,7 +18,7 @@ public class PlacesAppDb implements AppRepository {
 
     @Override
     public Single<List<Place>> getPlaces() {
-        return null;
+        return mPlaceDao.getAllPlaces();
     }
 
     @Override

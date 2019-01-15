@@ -1,8 +1,10 @@
 package com.example.darte.petroguide.presenter.dagger;
 
 import com.example.darte.petroguide.presenter.domain.interactor.DbSynchronization;
+import com.example.darte.petroguide.presenter.domain.interactor.PlacesLoading;
+import com.example.darte.petroguide.presenter.navigation.SplashScreenRouter;
 import com.example.darte.petroguide.presenter.presentation.mapscreen.MapPresenter;
-import com.example.darte.petroguide.presenter.presentation.splashscreen.SplashPresenter;
+import com.example.darte.petroguide.presenter.presentation.splashscreen.SplashScreenPresenter;
 import dagger.Module;
 import dagger.Provides;
 
@@ -13,15 +15,15 @@ class PresenterModule {
 
     @Singleton
     @Provides
-    MapPresenter provideMapPresenter(){
-        MapPresenter mapPresenter = new MapPresenter();
+    MapPresenter provideMapPresenter(PlacesLoading placesLoading){
+        MapPresenter mapPresenter = new MapPresenter(placesLoading);
         return mapPresenter;
     }
 
     @Singleton
     @Provides
-    SplashPresenter provideSplashPresenter(DbSynchronization dbSynchronization){
-        SplashPresenter splashPresenter = new SplashPresenter(dbSynchronization);
-        return splashPresenter;
+    SplashScreenPresenter provideSplashPresenter(DbSynchronization dbSynchronization, SplashScreenRouter splashScreenRouter){
+        SplashScreenPresenter splashScreenPresenter = new SplashScreenPresenter(dbSynchronization,splashScreenRouter);
+        return splashScreenPresenter;
     }
 }

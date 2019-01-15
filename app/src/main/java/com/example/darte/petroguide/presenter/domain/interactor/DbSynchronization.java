@@ -4,9 +4,10 @@ import android.util.Log;
 import com.example.darte.petroguide.presenter.domain.model.Place;
 import com.example.darte.petroguide.presenter.domain.repositories.AppRepository;
 import com.example.darte.petroguide.presenter.domain.repositories.CloudRepository;
-import io.reactivex.SingleObserver;
+import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
+import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -17,6 +18,7 @@ public class DbSynchronization {
 
     private AppRepository mAppRepository;
     private CloudRepository mCloudRepository;
+    public static String placerr;
 
     @Inject
     public DbSynchronization(AppRepository appRepository, CloudRepository cloudRepository){
@@ -24,31 +26,34 @@ public class DbSynchronization {
         mCloudRepository = cloudRepository;
     }
 
-    public void synchronizeAppDbWithCloudDb(){
 
-        mCloudRepository.getPlaces()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<List<Place>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+    public Single<Boolean> synchronizeAppDbWithCloudDbAsync(){
+        return Single.create(new SingleOnSubscribe<Boolean>() {
+            @Override
+            public void subscribe(final SingleEmitter<Boolean> emitter) throws Exception {
+                mCloudRepository.getPlaces()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new DisposableSingleObserver<List<Place>>() {
+                            @Override
+                            public void onSuccess(List<Place> places) {
+                                for(Place place:places) {
+                                    addPlaceToAppDB(place);
+                                    Log.i("PLACES", "name: " + places.get(0).getName());
+                                    placerr = "no";
+                                }
+                                emitter.onSuccess(true);
+                            }
 
-                    }
+                            @Override
+                            public void onError(Throwable e) {
 
-                    @Override
-                    public void onSuccess(List<Place> places) {
-                        for(Place place:places) {
-                            addPlaceToAppDB(place);
-                            Log.i("PLACES", "name: " + places.get(0).getName());
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-                });
+                            }
+                        });
+            }
+        }).subscribeOn(Schedulers.io());
     }
+
 
     private void addPlaceToAppDB(Place place) {
         mAppRepository.insertPlace(place)

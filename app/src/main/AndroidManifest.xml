@@ -20,8 +20,9 @@
                 android:name="com.google.android.geo.API_KEY"
                 android:value="AIzaSyAC-ajiX-oizorQ9JGndslwu0VGm7Qu8Zk"/>
 
-        <activity android:name=".presenter.presentation.splashscreen.SplashActivity"
-                  android:theme="@style/SplashTheme">
+        <activity android:name=".presenter.presentation.splashscreen.SplashScreenActivity"
+                  android:theme="@style/SplashTheme"
+                  android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

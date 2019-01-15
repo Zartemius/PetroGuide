@@ -3,6 +3,7 @@ package com.example.darte.petroguide.presenter.dagger;
 import com.example.darte.petroguide.presenter.data.clouddatabase.PlacesCloudDb;
 import com.example.darte.petroguide.presenter.data.appdatabase.PlacesAppDb;
 import com.example.darte.petroguide.presenter.domain.interactor.DbSynchronization;
+import com.example.darte.petroguide.presenter.domain.interactor.PlacesLoading;
 import dagger.Module;
 import dagger.Provides;
 
@@ -16,5 +17,11 @@ public class InteractorModule {
     DbSynchronization provideDbSynchronization(PlacesAppDb placesAppDb, PlacesCloudDb placesCloudDb){
         DbSynchronization dbSynchronization = new DbSynchronization(placesAppDb,placesCloudDb);
         return dbSynchronization;
+    }
+
+    @Singleton
+    @Provides
+    PlacesLoading placesLoading(PlacesAppDb placesAppDb){
+        return new PlacesLoading(placesAppDb);
     }
 }

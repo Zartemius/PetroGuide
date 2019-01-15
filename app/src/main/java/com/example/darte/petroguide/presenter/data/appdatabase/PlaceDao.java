@@ -12,7 +12,7 @@ import java.util.List;
 public interface PlaceDao  {
 
     @Query(value="SELECT*FROM places")
-    List<Place> getAllPlaces();
+    Single<List<Place>> getAllPlaces();
 
     @Insert
     Single<Long> insert(Place place);

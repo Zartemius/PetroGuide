@@ -31,7 +31,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
 
     @Inject
     MapPresenter mapPresenter;
-
     private GoogleMap mMap;
     private MapView mMapView;
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
@@ -62,6 +61,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
         }
 
         initializeMap(view,mapViewBundle);
+        mapPresenter.loadPlacesToMap();
 
         return view;
     }
