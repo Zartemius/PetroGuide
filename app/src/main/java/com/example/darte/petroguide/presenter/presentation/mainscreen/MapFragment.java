@@ -120,8 +120,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
 
         //mMap.setMinZoomPreference(12);
 
-        //mMap.getUiSettings().setZoomControlsEnabled(true);
-        //mMap.setMinZoomPreference(100);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.setMinZoomPreference(11);
 
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
