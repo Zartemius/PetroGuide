@@ -16,6 +16,6 @@ public interface PlaceDao  {
     @Query("DELETE from places WHERE unique_id NOT IN (:placesIdList)")
     void deletePlaceFromDb(List<String> placesIdList);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(List<Place> places);
 }
