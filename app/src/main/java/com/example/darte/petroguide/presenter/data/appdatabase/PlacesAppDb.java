@@ -1,5 +1,6 @@
 package com.example.darte.petroguide.presenter.data.appdatabase;
 
+import android.util.Log;
 import com.example.darte.petroguide.presenter.domain.repositories.AppRepository;
 import com.example.darte.petroguide.presenter.domain.model.Place;
 import io.reactivex.Single;
@@ -22,7 +23,12 @@ public class PlacesAppDb implements AppRepository {
     }
 
     @Override
-    public Single<Long> insertPlace(Place place) {
-        return mPlaceDao.insert(place);
+    public void insertPlace(List<Place> places) {
+        mPlaceDao.insert(places);
+    }
+
+    @Override
+    public void deletePlaces(List<String> placesList) {
+        mPlaceDao.deletePlaceFromDb(placesList);
     }
 }

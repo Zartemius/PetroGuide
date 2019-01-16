@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import com.example.darte.petroguide.R;
 import com.example.darte.petroguide.presenter.PGApplication;
 import com.example.darte.petroguide.presenter.domain.interactor.DbSynchronization;
+import com.example.darte.petroguide.presenter.domain.model.Place;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -170,18 +171,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
 
 
     @Override
-    public void loadDataInMap(List<LatLng> listOfCoordinats) {
-        for(LatLng i: listOfCoordinats){
-            createMap(i);
+    public void loadDataInMap(List<Place> listOfPlaces) {
+        for(Place place: listOfPlaces){
+            createMap(place);
         }
     }
 
-    private void createMap(LatLng latLng){
-        LatLng building = latLng;
+    private void createMap(Place place){
+        LatLng building = new LatLng(place.getLatitude(),place.getLongitude());
+        String placeName = place.getName();
+        String address = place.getAddress();
 
         mMap.addMarker( new MarkerOptions().position(building)
-                .title("building")
-                .snippet("some place")
+                .title(placeName)
+                .snippet(address)
                 .icon(BitmapDescriptorFactory.fromBitmap(convertImageToBitmap(R.drawable.marker)))
                 .rotation(20)
                 .draggable(false));

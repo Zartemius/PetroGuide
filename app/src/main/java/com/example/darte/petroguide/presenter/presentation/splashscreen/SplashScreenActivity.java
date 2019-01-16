@@ -1,10 +1,8 @@
 package com.example.darte.petroguide.presenter.presentation.splashscreen;
 
-import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.example.darte.petroguide.presenter.PGApplication;
-import com.example.darte.petroguide.presenter.domain.interactor.DbSynchronization;
 import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.android.support.SupportAppNavigator;
 
@@ -12,8 +10,7 @@ import javax.inject.Inject;
 
 public class SplashScreenActivity extends AppCompatActivity implements SplashActivityView {
 
-    @Inject
-    SplashScreenPresenter mSplashScreenPresenter;
+    @Inject SplashScreenPresenter mSplashScreenPresenter;
     private Navigator mNavigator = new SupportAppNavigator(this,-1);
 
     @Override

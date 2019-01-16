@@ -3,26 +3,22 @@ package com.example.darte.petroguide.presenter.presentation.mapscreen;
 import android.util.Log;
 import com.example.darte.petroguide.presenter.domain.interactor.PlacesLoading;
 import com.example.darte.petroguide.presenter.domain.model.Place;
-import com.google.android.gms.maps.model.LatLng;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MapPresenter {
 
     private PlacesLoading mPlacesLoading;
     private Disposable mDisposable;
+    private MapFragmentView mapFragmentView = null;
 
     @Inject
     public MapPresenter(PlacesLoading placesLoading){
         mPlacesLoading = placesLoading;
     }
-
-    private MapFragmentView mapFragmentView = null;
 
     void subscribe(MapFragmentView view){
         mapFragmentView = view;
@@ -36,7 +32,7 @@ public class MapPresenter {
 
     void onMapReady(){
 
-        List list = new ArrayList<LatLng>();
+       /* List list = new ArrayList<LatLng>();
 
         LatLng buildingOne = new LatLng(59.96980441,30.30065453);
         LatLng buildingtwo = new LatLng(59.96595386,30.3096571);
@@ -54,7 +50,7 @@ public class MapPresenter {
         list.add(buildingSix);
         list.add(buildingSeven);
 
-        mapFragmentView.loadDataInMap(list);
+        mapFragmentView.loadDataInMap(list);*/
     }
 
     void callSheetWithShortInfoAboutPoint(){
@@ -66,7 +62,9 @@ public class MapPresenter {
                 .subscribe(new Consumer<List<Place>>() {
             @Override
             public void accept(List<Place> places) throws Exception {
-
+                for(Place place:places){
+                    Log.i("PLACE_INFO","result " + place.getName());
+                }
             }
         });
     }

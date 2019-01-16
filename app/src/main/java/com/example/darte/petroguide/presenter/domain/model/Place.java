@@ -8,6 +8,10 @@ import org.jetbrains.annotations.NotNull;
 @Entity(tableName = "places")
 public class Place {
 
+    public Place(){
+
+    }
+
     @PrimaryKey()
     @NotNull
     @ColumnInfo(name="unique_id")

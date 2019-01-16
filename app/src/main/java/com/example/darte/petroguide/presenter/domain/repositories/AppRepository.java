@@ -6,7 +6,7 @@ import io.reactivex.Single;
 import java.util.List;
 
 public interface AppRepository {
-
     Single<List<Place>> getPlaces();
-    Single<Long> insertPlace(Place place);
+    void insertPlace(List<Place> places);
+    void deletePlaces(List<String> placesList);
 }
