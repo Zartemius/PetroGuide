@@ -1,4 +1,4 @@
-package com.example.darte.petroguide.presenter.presentation.mapscreen;
+package com.example.darte.petroguide.presenter.presentation.mainscreen;
 
 import android.util.Log;
 import com.example.darte.petroguide.presenter.domain.interactor.PlacesLoading;
@@ -62,9 +62,7 @@ public class MapPresenter {
                 .subscribe(new Consumer<List<Place>>() {
             @Override
             public void accept(List<Place> places) throws Exception {
-                for(Place place:places){
-                    Log.i("PLACE_INFO","result " + place.getName());
-                }
+                mapFragmentView.loadDataInMap(places);
             }
         });
     }

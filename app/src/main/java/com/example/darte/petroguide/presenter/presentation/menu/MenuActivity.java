@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 import com.example.darte.petroguide.R;
-import com.example.darte.petroguide.presenter.presentation.mapscreen.MapFragment;
+import com.example.darte.petroguide.presenter.presentation.mainscreen.MapFragment;
 
 public class MenuActivity extends AppCompatActivity {
 

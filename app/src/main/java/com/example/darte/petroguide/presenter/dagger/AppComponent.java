@@ -1,7 +1,7 @@
 package com.example.darte.petroguide.presenter.dagger;
 
 import com.example.darte.petroguide.presenter.presentation.splashscreen.SplashScreenActivity;
-import com.example.darte.petroguide.presenter.presentation.mapscreen.MapFragment;
+import com.example.darte.petroguide.presenter.presentation.mainscreen.MapFragment;
 import dagger.Component;
 import javax.inject.Singleton;
 

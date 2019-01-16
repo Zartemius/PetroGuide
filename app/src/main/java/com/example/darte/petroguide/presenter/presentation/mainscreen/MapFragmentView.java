@@ -1,13 +1,12 @@
-package com.example.darte.petroguide.presenter.presentation.mapscreen;
+package com.example.darte.petroguide.presenter.presentation.mainscreen;
 
 import com.example.darte.petroguide.presenter.domain.model.Place;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
 public interface MapFragmentView {
 
-    void loadDataInMap(List<Place> listOfCoordinates);
+    void loadDataInMap(List<Place> listOfPlaces);
 
     void checkPermissionForGettingUserLocation();
 

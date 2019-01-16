@@ -1,4 +1,4 @@
-package com.example.darte.petroguide.presenter.presentation.mapscreen;
+package com.example.darte.petroguide.presenter.presentation.mainscreen;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.example.darte.petroguide.R;
 import com.example.darte.petroguide.presenter.PGApplication;
-import com.example.darte.petroguide.presenter.domain.interactor.DbSynchronization;
 import com.example.darte.petroguide.presenter.domain.model.Place;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -121,8 +120,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
 
         //mMap.setMinZoomPreference(12);
 
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-        mMap.setMinZoomPreference(11);
+        //mMap.getUiSettings().setZoomControlsEnabled(true);
+        //mMap.setMinZoomPreference(100);
 
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
@@ -172,7 +171,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
 
     @Override
     public void loadDataInMap(List<Place> listOfPlaces) {
-        for(Place place: listOfPlaces){
+        for(Place place:listOfPlaces){
+            Log.i("MAP_STATE","map_created iterator" + place.getName());
             createMap(place);
         }
     }
@@ -181,6 +181,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
         LatLng building = new LatLng(place.getLatitude(),place.getLongitude());
         String placeName = place.getName();
         String address = place.getAddress();
+
+        Log.i("MAP_STATE","map_created");
+        Log.i("MAP_STATE","longitude" + place.getLongitude());
+        Log.i("MAP_STATE","latitude" + place.getLatitude());
+
 
         mMap.addMarker( new MarkerOptions().position(building)
                 .title(placeName)

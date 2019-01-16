@@ -1,4 +1,4 @@
-package com.example.darte.petroguide.presenter.presentation.mapscreen;
+package com.example.darte.petroguide.presenter.presentation.mainscreen;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;

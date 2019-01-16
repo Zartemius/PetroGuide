@@ -1,5 +1,6 @@
 package com.example.darte.petroguide.presenter.domain.interactor;
 
+import android.util.Log;
 import com.example.darte.petroguide.presenter.domain.model.Place;
 import com.example.darte.petroguide.presenter.domain.repositories.AppRepository;
 import io.reactivex.Single;

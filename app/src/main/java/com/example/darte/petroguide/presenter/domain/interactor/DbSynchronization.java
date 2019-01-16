@@ -6,6 +6,7 @@ import com.example.darte.petroguide.presenter.domain.repositories.AppRepository;
 import com.example.darte.petroguide.presenter.domain.repositories.CloudRepository;
 import io.reactivex.*;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
@@ -26,64 +27,57 @@ public class DbSynchronization {
     }
 
 
-    public Single<Boolean> synchronizeAppDbWithCloudDbAsync(){
-        return Single.create(new SingleOnSubscribe<Boolean>() {
+    public Completable synchronizeAppDbWithCloudDbAsyn(final List<Place> placesList){
+
+        final List<String> placesId = new ArrayList<>();
+
+        for(Place place:placesList){
+            placesId.add(place.getUniqueId());
+        }
+
+        return Completable.fromAction(new Action() {
             @Override
-            public void subscribe(final SingleEmitter<Boolean> emitter) throws Exception {
-                mCloudRepository.getPlaces()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new DisposableSingleObserver<List<Place>>() {
-                            @Override
-                            public void onSuccess(final List<Place> places) {
-                                Log.i("SYNCHRONIZATION", "items_loaded");
-                                List<String> placesId = new ArrayList<>();
+            public void run() throws Exception {
 
-                                for(Place place:places){
-                                    placesId.add(place.getUniqueId());
-                                }
+                deleteItemsFromAppDbThatDontExistInCLoudDb(placesId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableCompletableObserver() {
+                    @Override
+                    public void onComplete() {
+                        Log.i("DATA_SOURCE", "works");
+                        Log.i("SYNCHRONIZATION", "items_deleted");
+                        for(Place place:placesList) {
+                            Log.i("LOADED_PLACE", "resultList" + place.getName());
+                        }
+                        addPlaceToAppDB(placesList)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new DisposableCompletableObserver() {
+                                    @Override
+                                    public void onComplete() {
+                                        Log.i("SYNCHRONIZATION", "items_added");
 
-                                deleteItemsFromAppDbThatDontExistInCLoudDb(placesId)
-                                        .subscribeOn(Schedulers.io())
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe(new DisposableCompletableObserver() {
-                                            @Override
-                                            public void onComplete() {
-                                                Log.i("DATA_SOURCE", "works");
-                                                Log.i("SYNCHRONIZATION", "items_deleted");
-                                                addPlaceToAppDB(places)
-                                                .subscribeOn(Schedulers.io())
-                                                        .observeOn(AndroidSchedulers.mainThread())
-                                                        .subscribe(new DisposableCompletableObserver() {
-                                                            @Override
-                                                            public void onComplete() {
-                                                                Log.i("SYNCHRONIZATION", "items_added");
-                                                                emitter.onSuccess(true);
-                                                            }
-                                                            @Override
-                                                            public void onError(Throwable e) {
-                                                                Log.i("SYNCHRONIZATION",
-                                                                        "items_added_error "+ e);
-                                                                emitter.onSuccess(true);
-                                                            }
-                                                        });
-                                            }
+                                    }
 
-                                            @Override
-                                            public void onError(Throwable e) {
-                                                Log.i("DATA_SOURCE", "no_works" + e);
-                                            }
-                                        });
-                            }
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        Log.i("SYNCHRONIZATION",
+                                                "items_added_error " + e);
+                                    }
+                                });
+                    }
 
-                            @Override
-                            public void onError(Throwable e) {
-
-                            }
-                        });
-                     }
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.i("DATA_SOURCE", "no_works" + e);
+                    }
                 });
             }
+        });
+    }
+
+
 
     private Completable addPlaceToAppDB(final List<Place> places) {
         return Completable.fromAction(new Action() {
@@ -101,5 +95,9 @@ public class DbSynchronization {
                 mAppRepository.deletePlaces(places);
             }
         });
+    }
+
+    public Single<List<Place>> loadPlacesFromServer(){
+        return mCloudRepository.getPlaces();
     }
 }
