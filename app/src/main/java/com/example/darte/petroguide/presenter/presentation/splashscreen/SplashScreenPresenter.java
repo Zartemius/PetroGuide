@@ -1,5 +1,6 @@
 package com.example.darte.petroguide.presenter.presentation.splashscreen;
 
+import android.util.Log;
 import com.example.darte.petroguide.presenter.domain.interactor.DbSynchronization;
 import com.example.darte.petroguide.presenter.domain.model.Place;
 import com.example.darte.petroguide.presenter.navigation.SplashScreenRouter;
@@ -56,6 +57,7 @@ public class SplashScreenPresenter {
                                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new DisposableCompletableObserver() {
                             @Override
                             public void onComplete() {
+                                Log.i("NAVIGATION","splashScreen ready");
                                 mSplashScreenRouter.navigateForward();
                             }
 

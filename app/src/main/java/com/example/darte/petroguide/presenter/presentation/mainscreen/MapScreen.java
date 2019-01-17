@@ -60,6 +60,7 @@ public class MapScreen extends Fragment implements OnMapReadyCallback,MapScreenV
             mapViewBundle = savedInstanceState.getBundle(MAP_VIEW_BUNDLE_KEY);
         }
 
+
         initializeMap(view,mapViewBundle);
 
         return view;

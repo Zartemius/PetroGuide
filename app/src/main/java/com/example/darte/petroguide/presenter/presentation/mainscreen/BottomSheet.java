@@ -17,8 +17,7 @@ import javax.inject.Inject;
 
 public class BottomSheet extends BottomSheetDialogFragment implements BottomSheetView{
 
-    @Inject
-    BottomSheetPresenter mBottomSheetPresenter;
+    @Inject BottomSheetPresenter mBottomSheetPresenter;
     private TextView mPlaceName;
 
     @Nullable
