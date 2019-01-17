@@ -27,7 +27,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import javax.inject.Inject;
 import java.util.List;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragmentView {
+public class MapScreen extends Fragment implements OnMapReadyCallback,MapScreenView {
 
     @Inject
     MapPresenter mapPresenter;
@@ -61,7 +61,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
         }
 
         initializeMap(view,mapViewBundle);
-        mapPresenter.loadPlacesToMap();
 
         return view;
     }
@@ -112,9 +111,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Log.i("MAP", "DOES WORK");
         mMap = googleMap;
-        mapPresenter.onMapReady();
+        mapPresenter.loadPlacesToMap();
 
         //mMap.setMyLocationEnabled(true);
 
@@ -126,21 +124,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                mapPresenter.callSheetWithShortInfoAboutPoint();
+                String placeId = marker.getTag().toString();
+                mapPresenter.callSheetWithShortInfoAboutPoint(placeId);
+
+                Log.i("MARKER", "id" + marker.getTag().toString());
+
             }
         });
 
-        /*LatLng building = new LatLng(59.96980441,30.30065453);
-        LatLng buildingTwo = new LatLng(59.96595386,30.3096571);
-
-        Marker buildingByTheRiver = mMap.addMarker( new MarkerOptions().position(building)
-                .title("building")
-                .snippet("Доходный дом на набережной р.Карповки. " + "/n"+
-                        "Узнать больше...")
-                .icon(BitmapDescriptorFactory.fromBitmap(convertImageToBitmap(R.drawable.marker)))
-                .rotation(20)
-                .draggable(false));
-
+        /*
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
@@ -172,7 +164,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
     @Override
     public void loadDataInMap(List<Place> listOfPlaces) {
         for(Place place:listOfPlaces){
-            Log.i("MAP_STATE","map_created iterator" + place.getName());
             createMap(place);
         }
     }
@@ -181,18 +172,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
         LatLng building = new LatLng(place.getLatitude(),place.getLongitude());
         String placeName = place.getName();
         String address = place.getAddress();
-
-        Log.i("MAP_STATE","map_created");
-        Log.i("MAP_STATE","longitude" + place.getLongitude());
-        Log.i("MAP_STATE","latitude" + place.getLatitude());
-
+        String placeId  = place.getUniqueId();
 
         mMap.addMarker( new MarkerOptions().position(building)
                 .title(placeName)
                 .snippet(address)
                 .icon(BitmapDescriptorFactory.fromBitmap(convertImageToBitmap(R.drawable.marker)))
                 .rotation(20)
-                .draggable(false));
+                .draggable(false))
+                .setTag(placeId);
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(building));
     }
@@ -225,8 +213,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback,MapFragm
     }
 
     @Override
-    public void callBottomSheet(){
+    public void callBottomSheet(String id){
+
         BottomSheet bottomSheet = new BottomSheet();
+        Bundle placeData = new Bundle();
+        placeData.putString("placeId",id);
+        bottomSheet.setArguments(placeData);
+
         try {
             bottomSheet.show(getActivity().getSupportFragmentManager(), "bottomSheet");
         }catch (NullPointerException e){

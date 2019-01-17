@@ -13,6 +13,9 @@ public interface PlaceDao  {
     @Query(value="SELECT*FROM places")
     Single<List<Place>> getAllPlaces();
 
+    @Query("SELECT * FROM places WHERE unique_id LIKE :id")
+    Single<Place> getPlaceById(String id);
+
     @Query("DELETE from places WHERE unique_id NOT IN (:placesIdList)")
     void deletePlaceFromDb(List<String> placesIdList);
 

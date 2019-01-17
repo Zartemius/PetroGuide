@@ -1,7 +1,8 @@
 package com.example.darte.petroguide.presenter.dagger;
 
+import com.example.darte.petroguide.presenter.presentation.mainscreen.BottomSheet;
 import com.example.darte.petroguide.presenter.presentation.splashscreen.SplashScreenActivity;
-import com.example.darte.petroguide.presenter.presentation.mainscreen.MapFragment;
+import com.example.darte.petroguide.presenter.presentation.mainscreen.MapScreen;
 import dagger.Component;
 import javax.inject.Singleton;
 
@@ -15,6 +16,7 @@ import javax.inject.Singleton;
                       NavigationModule.class,})
 
 public interface AppComponent {
-    void inject(MapFragment fragment);
+    void inject(MapScreen fragment);
     void inject(SplashScreenActivity splashScreenActivity);
+    void inject(BottomSheet bottomSheetFragment);
 }

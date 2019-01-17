@@ -1,15 +1,10 @@
 package com.example.darte.petroguide.presenter.presentation.splashscreen;
 
-import android.util.Log;
 import com.example.darte.petroguide.presenter.domain.interactor.DbSynchronization;
 import com.example.darte.petroguide.presenter.domain.model.Place;
 import com.example.darte.petroguide.presenter.navigation.SplashScreenRouter;
-import io.reactivex.CompletableObserver;
-import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -52,12 +47,12 @@ public class SplashScreenPresenter {
     }
 
     void updateDataInDb() {
-        mDisposable = mDbSynchronization.loadPlacesFromServer()
+        mDisposable = mDbSynchronization.loadPlacesFromServerAsync()
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSingleObserver<List<Place>>() {
                     @Override
                     public void onSuccess(List<Place> places) {
-                        mDbSynchronization.synchronizeAppDbWithCloudDbAsyn(places).subscribeOn(Schedulers.io())
+                        mDbSynchronization.synchronizeAppDbWithCloudDbAsync(places).subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new DisposableCompletableObserver() {
                             @Override
                             public void onComplete() {

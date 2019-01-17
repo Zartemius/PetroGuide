@@ -3,10 +3,12 @@ package com.example.darte.petroguide.presenter.dagger;
 import com.example.darte.petroguide.presenter.domain.interactor.DbSynchronization;
 import com.example.darte.petroguide.presenter.domain.interactor.PlacesLoading;
 import com.example.darte.petroguide.presenter.navigation.SplashScreenRouter;
+import com.example.darte.petroguide.presenter.presentation.mainscreen.BottomSheetPresenter;
 import com.example.darte.petroguide.presenter.presentation.mainscreen.MapPresenter;
 import com.example.darte.petroguide.presenter.presentation.splashscreen.SplashScreenPresenter;
 import dagger.Module;
 import dagger.Provides;
+import io.reactivex.disposables.CompositeDisposable;
 
 import javax.inject.Singleton;
 
@@ -25,5 +27,12 @@ class PresenterModule {
     SplashScreenPresenter provideSplashPresenter(DbSynchronization dbSynchronization, SplashScreenRouter splashScreenRouter){
         SplashScreenPresenter splashScreenPresenter = new SplashScreenPresenter(dbSynchronization,splashScreenRouter);
         return splashScreenPresenter;
+    }
+
+    @Singleton
+    @Provides
+    BottomSheetPresenter provideBottomSheetPresenter(PlacesLoading placesLoading){
+        BottomSheetPresenter bottomSheetPresenter = new BottomSheetPresenter(placesLoading);
+        return bottomSheetPresenter;
     }
 }

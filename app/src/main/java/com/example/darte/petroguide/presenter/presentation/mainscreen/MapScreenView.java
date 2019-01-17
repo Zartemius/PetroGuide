@@ -4,11 +4,11 @@ import com.example.darte.petroguide.presenter.domain.model.Place;
 
 import java.util.List;
 
-public interface MapFragmentView {
+public interface MapScreenView {
 
     void loadDataInMap(List<Place> listOfPlaces);
 
     void checkPermissionForGettingUserLocation();
 
-    void callBottomSheet();
+    void callBottomSheet(String placeId);
 }

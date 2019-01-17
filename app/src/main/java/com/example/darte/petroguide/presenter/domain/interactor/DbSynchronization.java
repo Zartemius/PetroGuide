@@ -6,10 +6,8 @@ import com.example.darte.petroguide.presenter.domain.repositories.AppRepository;
 import com.example.darte.petroguide.presenter.domain.repositories.CloudRepository;
 import io.reactivex.*;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.observers.DisposableCompletableObserver;
-import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -26,20 +24,18 @@ public class DbSynchronization {
         mCloudRepository = cloudRepository;
     }
 
-
-    public Completable synchronizeAppDbWithCloudDbAsyn(final List<Place> placesList){
+    public Completable synchronizeAppDbWithCloudDbAsync(final List<Place> places){
 
         final List<String> placesId = new ArrayList<>();
 
-        for(Place place:placesList){
+        for(Place place:places){
             placesId.add(place.getUniqueId());
         }
 
         return Completable.fromAction(new Action() {
             @Override
             public void run() throws Exception {
-
-                deleteItemsFromAppDbThatDontExistInCLoudDb(placesId)
+                deleteItemsFromAppDbThatDontExistInCLoudDbAsync(placesId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableCompletableObserver() {
@@ -47,17 +43,16 @@ public class DbSynchronization {
                     public void onComplete() {
                         Log.i("DATA_SOURCE", "works");
                         Log.i("SYNCHRONIZATION", "items_deleted");
-                        for(Place place:placesList) {
+                        for(Place place:places) {
                             Log.i("LOADED_PLACE", "resultList" + place.getName());
                         }
-                        addPlaceToAppDB(placesList)
+                        addPlaceToAppDBAsync(places)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(new DisposableCompletableObserver() {
                                     @Override
                                     public void onComplete() {
                                         Log.i("SYNCHRONIZATION", "items_added");
-
                                     }
 
                                     @Override
@@ -79,7 +74,7 @@ public class DbSynchronization {
 
 
 
-    private Completable addPlaceToAppDB(final List<Place> places) {
+    private Completable addPlaceToAppDBAsync(final List<Place> places) {
         return Completable.fromAction(new Action() {
             @Override
             public void run() throws Exception {
@@ -88,7 +83,7 @@ public class DbSynchronization {
         });
     }
 
-    private Completable deleteItemsFromAppDbThatDontExistInCLoudDb(final List<String> places){
+    private Completable deleteItemsFromAppDbThatDontExistInCLoudDbAsync(final List<String> places){
         return Completable.fromAction(new Action() {
             @Override
             public void run() throws Exception {
@@ -97,7 +92,7 @@ public class DbSynchronization {
         });
     }
 
-    public Single<List<Place>> loadPlacesFromServer(){
+    public Single<List<Place>> loadPlacesFromServerAsync(){
         return mCloudRepository.getPlaces();
     }
 }

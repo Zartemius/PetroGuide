@@ -1,69 +1,56 @@
 package com.example.darte.petroguide.presenter.presentation.mainscreen;
 
-import android.util.Log;
 import com.example.darte.petroguide.presenter.domain.interactor.PlacesLoading;
 import com.example.darte.petroguide.presenter.domain.model.Place;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
+
 import javax.inject.Inject;
 import java.util.List;
 
 public class MapPresenter {
 
     private PlacesLoading mPlacesLoading;
+    private MapScreenView mapScreenView = null;
     private Disposable mDisposable;
-    private MapFragmentView mapFragmentView = null;
 
     @Inject
     public MapPresenter(PlacesLoading placesLoading){
         mPlacesLoading = placesLoading;
     }
 
-    void subscribe(MapFragmentView view){
-        mapFragmentView = view;
-        mapFragmentView.checkPermissionForGettingUserLocation();
+    void subscribe(MapScreenView view){
+        mapScreenView = view;
+        mapScreenView.checkPermissionForGettingUserLocation();
     }
 
     void unsubscribe(){
-        mapFragmentView = null;
-        mDisposable = null;
+        mapScreenView = null;
+        if(mDisposable != null) {
+            mDisposable.dispose();
+        }
     }
 
-    void onMapReady(){
-
-       /* List list = new ArrayList<LatLng>();
-
-        LatLng buildingOne = new LatLng(59.96980441,30.30065453);
-        LatLng buildingtwo = new LatLng(59.96595386,30.3096571);
-        LatLng buildingThree = new LatLng(59.94119134,30.3139143);
-        LatLng buildingFour = new LatLng(59.93996605,30.27490854);
-        LatLng buildingFive = new LatLng(59.94585345,30.27430773);
-        LatLng buildingSix = new LatLng(59.96226343,30.28320837);
-        LatLng buildingSeven = new LatLng(60.0282477,30.41184497);
-
-        list.add(buildingOne);
-        list.add(buildingtwo);
-        list.add(buildingThree);
-        list.add(buildingFour);
-        list.add(buildingFive);
-        list.add(buildingSix);
-        list.add(buildingSeven);
-
-        mapFragmentView.loadDataInMap(list);*/
-    }
-
-    void callSheetWithShortInfoAboutPoint(){
-        mapFragmentView.callBottomSheet();
+    void callSheetWithShortInfoAboutPoint(String placeId){
+        mapScreenView.callBottomSheet(placeId);
     }
 
     void loadPlacesToMap(){
-        mDisposable = mPlacesLoading.getPlaces().observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<Place>>() {
-            @Override
-            public void accept(List<Place> places) throws Exception {
-                mapFragmentView.loadDataInMap(places);
-            }
+       mDisposable = mPlacesLoading.getPlaces()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<List<Place>>() {
+                    @Override
+                    public void onSuccess(List<Place> places) {
+                        mapScreenView.loadDataInMap(places);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
         });
     }
 }

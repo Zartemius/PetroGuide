@@ -9,4 +9,5 @@ public interface AppRepository {
     Single<List<Place>> getPlaces();
     void insertPlace(List<Place> places);
     void deletePlaces(List<String> placesList);
+    Single<Place> getPlace(String id);
 }

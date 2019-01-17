@@ -31,4 +31,9 @@ public class PlacesAppDb implements AppRepository {
     public void deletePlaces(List<String> placesList) {
         mPlaceDao.deletePlaceFromDb(placesList);
     }
+
+    @Override
+    public Single<Place> getPlace (String id) {
+        return mPlaceDao.getPlaceById(id);
+    }
 }
