@@ -27,14 +27,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import javax.inject.Inject;
 import java.util.List;
 
-public class MapScreen extends Fragment implements OnMapReadyCallback,MapScreenView {
+public class MainMapScreen extends Fragment implements OnMapReadyCallback,MainMapScreenView {
 
     @Inject
-    MapPresenter mapPresenter;
+    MainMapPresenter mainMapPresenter;
     private GoogleMap mMap;
     private MapView mMapView;
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
     private static final int REQ_CODE = 111;
+
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -61,6 +62,7 @@ public class MapScreen extends Fragment implements OnMapReadyCallback,MapScreenV
         }
 
 
+        Log.i("MAP_INITIALIZATION","on_create_view");
         initializeMap(view,mapViewBundle);
 
         return view;
@@ -70,7 +72,7 @@ public class MapScreen extends Fragment implements OnMapReadyCallback,MapScreenV
     public void onResume() {
         super.onResume();
         mMapView.onResume();
-        mapPresenter.subscribe(this);
+        mainMapPresenter.subscribe(this);
     }
 
     @Override
@@ -89,7 +91,7 @@ public class MapScreen extends Fragment implements OnMapReadyCallback,MapScreenV
     public void onPause() {
         super.onPause();
         mMapView.onPause();
-        mapPresenter.unsubscribe();
+        mainMapPresenter.unsubscribe();
     }
 
     @Override
@@ -105,6 +107,7 @@ public class MapScreen extends Fragment implements OnMapReadyCallback,MapScreenV
     }
 
     private void initializeMap(View view,Bundle mapViewBundle){
+        Log.i("MAP_INITIALIZATION","initialized");
         mMapView = view.findViewById(R.id.map_fragment__map_view);
         mMapView.onCreate(mapViewBundle);
         mMapView.getMapAsync(this);
@@ -112,34 +115,34 @@ public class MapScreen extends Fragment implements OnMapReadyCallback,MapScreenV
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
         mMap = googleMap;
-        mapPresenter.loadPlacesToMap();
 
-        //mMap.setMyLocationEnabled(true);
+        setMapCameraZoom();
+        Log.i("MAP_INITIALIZATION","onMapReady");
+        Log.i("MAP_INITIALIZATION","permission" + permissionWasGranted());
 
-        //mMap.setMinZoomPreference(12);
+        mainMapPresenter.loadPlacesToMap();
 
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-        mMap.setMinZoomPreference(11);
+        /*try {
+            mMap.setMyLocationEnabled(true);
+        }catch (SecurityException e){
+            requestPermission();
+        }*/
+
+        //mMap.getUiSettings().setZoomControlsEnabled(true);
+        //mMap.setMinZoomPreference(9);
 
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
                 String placeId = marker.getTag().toString();
-                mapPresenter.callSheetWithShortInfoAboutPoint(placeId);
-
+                mainMapPresenter.callSheetWithShortInfoAboutPoint(placeId);
                 Log.i("MARKER", "id" + marker.getTag().toString());
-
             }
         });
 
         /*
-        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-            @Override
-            public void onInfoWindowClick(Marker marker) {
-                Toast.makeText(getActivity(), R.string.app_name,Toast.LENGTH_SHORT).show();
-            }
-        });
 
         buildingByTheRiver.showInfoWindow();
 
@@ -155,8 +158,6 @@ public class MapScreen extends Fragment implements OnMapReadyCallback,MapScreenV
         uiSettings.setTiltGesturesEnabled(true);
         uiSettings.setZoomGesturesEnabled(true);*/
 
-
-
         /*LatLng spb = new LatLng(59.9386300,30.3141300);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(buildingTwo));*/
     }
@@ -166,6 +167,7 @@ public class MapScreen extends Fragment implements OnMapReadyCallback,MapScreenV
     public void loadDataInMap(List<Place> listOfPlaces) {
         for(Place place:listOfPlaces){
             createMap(place);
+            Log.i("MAP_INITIALIZATION","place_loaded " + place.getName());
         }
     }
 
@@ -183,6 +185,8 @@ public class MapScreen extends Fragment implements OnMapReadyCallback,MapScreenV
                 .draggable(false))
                 .setTag(placeId);
 
+        Log.i("MAP_INITIALIZATION","map_created");
+
         mMap.moveCamera(CameraUpdateFactory.newLatLng(building));
     }
 
@@ -199,23 +203,53 @@ public class MapScreen extends Fragment implements OnMapReadyCallback,MapScreenV
 
     @Override
     public void checkPermissionForGettingUserLocation() {
-        if(getActivity() != null) {
+       /* if(getActivity() != null) {
             if (ContextCompat.checkSelfPermission(
                     getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 requestPermission();
             }
-        }
-    }
-
-    private void requestPermission(){
-        if(getActivity() != null) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQ_CODE);
-        }
+        }*/
     }
 
     @Override
-    public void callBottomSheet(String id){
+    public void requestPermission(){
+        /*if(getActivity() != null) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQ_CODE);
+        }*/
+    }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if(requestCode == REQ_CODE){
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            }else{
+                Log.i("PERMISSION_MISTAKE","error");
+            }
+        }else{
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+
+    }
+
+    private boolean permissionWasGranted(){
+        return (ContextCompat.checkSelfPermission(
+                getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED);
+    }
+
+    private void setMapCameraZoom(){
+        CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(59.9386300,30.3141300));
+        CameraUpdate zoom = CameraUpdateFactory.zoomTo(6);
+
+        mMap.moveCamera(center);
+        mMap.animateCamera(zoom);
+    }
+
+
+    @Override
+    public void callBottomSheet(String id){
         BottomSheet bottomSheet = new BottomSheet();
         Bundle placeData = new Bundle();
         placeData.putString("placeId",id);

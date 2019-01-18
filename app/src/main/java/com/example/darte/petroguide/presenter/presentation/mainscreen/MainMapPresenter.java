@@ -1,5 +1,6 @@
 package com.example.darte.petroguide.presenter.presentation.mainscreen;
 
+import android.util.Log;
 import com.example.darte.petroguide.presenter.domain.interactor.PlacesLoading;
 import com.example.darte.petroguide.presenter.domain.model.Place;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -10,47 +11,54 @@ import io.reactivex.schedulers.Schedulers;
 import javax.inject.Inject;
 import java.util.List;
 
-public class MapPresenter {
+public class MainMapPresenter {
 
     private PlacesLoading mPlacesLoading;
-    private MapScreenView mapScreenView = null;
+    private MainMapScreenView mainMapScreenView = null;
     private Disposable mDisposable;
 
     @Inject
-    public MapPresenter(PlacesLoading placesLoading){
+    public MainMapPresenter(PlacesLoading placesLoading){
         mPlacesLoading = placesLoading;
     }
 
-    void subscribe(MapScreenView view){
-        mapScreenView = view;
-        mapScreenView.checkPermissionForGettingUserLocation();
+    void subscribe(MainMapScreenView view){
+        mainMapScreenView = view;
+        mainMapScreenView.checkPermissionForGettingUserLocation();
     }
 
     void unsubscribe(){
-        mapScreenView = null;
+        mainMapScreenView = null;
         if(mDisposable != null) {
             mDisposable.dispose();
         }
     }
 
     void callSheetWithShortInfoAboutPoint(String placeId){
-        mapScreenView.callBottomSheet(placeId);
+        mainMapScreenView.callBottomSheet(placeId);
     }
 
     void loadPlacesToMap(){
+        Log.i("MAP_INITIALIZATION","loading_launched");
        mDisposable = mPlacesLoading.getPlaces()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSingleObserver<List<Place>>() {
                     @Override
                     public void onSuccess(List<Place> places) {
-                        mapScreenView.loadDataInMap(places);
+                        mainMapScreenView.loadDataInMap(places);
+                        Log.i("MAP_INITIALIZATION","loading_launched_successful");
                     }
+
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Log.i("MAP_INITIALIZATION","loading_launched_error " + e);
                     }
         });
+    }
+
+    void requestUserLocationPermission(){
+        mainMapScreenView.requestPermission();
     }
 }

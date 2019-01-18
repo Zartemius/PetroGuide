@@ -1,6 +1,8 @@
 package com.example.darte.petroguide.presenter;
 
+import android.Manifest;
 import android.app.Application;
+import androidx.core.app.ActivityCompat;
 import com.example.darte.petroguide.presenter.dagger.AppComponent;
 import com.example.darte.petroguide.presenter.dagger.AppModule;
 import com.example.darte.petroguide.presenter.dagger.DaggerAppComponent;

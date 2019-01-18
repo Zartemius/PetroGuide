@@ -32,7 +32,9 @@ public class SplashScreenPresenter {
 
     void unsubscribe() {
         mSplashActivityView = null;
-        mDisposable.dispose();
+        if(mDisposable != null) {
+            mDisposable.dispose();
+        }
     }
 
     void setNavigator(Navigator navigator) {

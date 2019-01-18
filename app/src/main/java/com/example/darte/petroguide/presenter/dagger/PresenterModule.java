@@ -4,11 +4,10 @@ import com.example.darte.petroguide.presenter.domain.interactor.DbSynchronizatio
 import com.example.darte.petroguide.presenter.domain.interactor.PlacesLoading;
 import com.example.darte.petroguide.presenter.navigation.SplashScreenRouter;
 import com.example.darte.petroguide.presenter.presentation.mainscreen.BottomSheetPresenter;
-import com.example.darte.petroguide.presenter.presentation.mainscreen.MapPresenter;
+import com.example.darte.petroguide.presenter.presentation.mainscreen.MainMapPresenter;
 import com.example.darte.petroguide.presenter.presentation.splashscreen.SplashScreenPresenter;
 import dagger.Module;
 import dagger.Provides;
-import io.reactivex.disposables.CompositeDisposable;
 
 import javax.inject.Singleton;
 
@@ -17,9 +16,9 @@ class PresenterModule {
 
     @Singleton
     @Provides
-    MapPresenter provideMapPresenter(PlacesLoading placesLoading){
-        MapPresenter mapPresenter = new MapPresenter(placesLoading);
-        return mapPresenter;
+    MainMapPresenter provideMapPresenter(PlacesLoading placesLoading){
+        MainMapPresenter mainMapPresenter = new MainMapPresenter(placesLoading);
+        return mainMapPresenter;
     }
 
     @Singleton
