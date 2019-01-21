@@ -7,7 +7,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
-
 import javax.inject.Inject;
 
 public class BottomSheetPresenter {
@@ -21,14 +20,14 @@ public class BottomSheetPresenter {
         mPlaceLoading = placesLoading;
     }
 
-    public void subscribe(BottomSheetView bottomSheetView){
+    void subscribe(BottomSheetView bottomSheetView){
         Log.i("BOTTOM_VIEW","result subscribed");
         mBottomSheetView = bottomSheetView;
         Log.i("BOTTOM_VIEW","result subscribed object" + mBottomSheetView.toString());
 
     }
 
-    public void unsubscribe(){
+    void unsubscribe(){
         mBottomSheetView = null;
         Log.i("BOTTOM_VIEW","result unsubscribed");
         if(mDisposable != null) {
@@ -36,7 +35,7 @@ public class BottomSheetPresenter {
         }
     }
 
-    public void displayInformationAboutPlace(){
+    void displayInformationAboutPlace(){
         Log.i("BOTTOM_VIEW","result" + mBottomSheetView.toString());
         String placeId = mBottomSheetView.getPlaceId();
 

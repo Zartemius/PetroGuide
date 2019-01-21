@@ -49,7 +49,7 @@ public class SplashScreenPresenter {
         mSplashScreenRouter.navigateBack();
     }
 
-    void updateDataInDb() {
+    void updateDataInDbAndGetToTheNextScreen() {
         mDisposable = mDbSynchronization.loadPlacesFromServerAsync()
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSingleObserver<List<Place>>() {

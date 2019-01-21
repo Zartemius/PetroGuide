@@ -119,8 +119,6 @@ public class MainMapScreen extends Fragment implements OnMapReadyCallback,MainMa
         mMap = googleMap;
 
         setMapCameraZoom();
-        Log.i("MAP_INITIALIZATION","onMapReady");
-        Log.i("MAP_INITIALIZATION","permission" + permissionWasGranted());
 
         mainMapPresenter.loadPlacesToMap();
 
@@ -199,44 +197,6 @@ public class MainMapScreen extends Fragment implements OnMapReadyCallback,MainMa
         myDrawable.draw(canvas);
 
         return bitmap;
-    }
-
-    @Override
-    public void checkPermissionForGettingUserLocation() {
-       /* if(getActivity() != null) {
-            if (ContextCompat.checkSelfPermission(
-                    getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                requestPermission();
-            }
-        }*/
-    }
-
-    @Override
-    public void requestPermission(){
-        /*if(getActivity() != null) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQ_CODE);
-        }*/
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
-        if(requestCode == REQ_CODE){
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
-            }else{
-                Log.i("PERMISSION_MISTAKE","error");
-            }
-        }else{
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-
-
-    }
-
-    private boolean permissionWasGranted(){
-        return (ContextCompat.checkSelfPermission(
-                getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED);
     }
 
     private void setMapCameraZoom(){

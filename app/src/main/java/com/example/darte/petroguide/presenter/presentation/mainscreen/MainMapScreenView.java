@@ -8,9 +8,5 @@ public interface MainMapScreenView {
 
     void loadDataInMap(List<Place> listOfPlaces);
 
-    void checkPermissionForGettingUserLocation();
-
     void callBottomSheet(String placeId);
-
-    void requestPermission();
 }

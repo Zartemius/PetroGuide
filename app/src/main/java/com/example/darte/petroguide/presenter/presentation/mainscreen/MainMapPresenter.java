@@ -24,7 +24,7 @@ public class MainMapPresenter {
 
     void subscribe(MainMapScreenView view){
         mainMapScreenView = view;
-        mainMapScreenView.checkPermissionForGettingUserLocation();
+
     }
 
     void unsubscribe(){
@@ -58,7 +58,4 @@ public class MainMapPresenter {
         });
     }
 
-    void requestUserLocationPermission(){
-        mainMapScreenView.requestPermission();
-    }
 }
