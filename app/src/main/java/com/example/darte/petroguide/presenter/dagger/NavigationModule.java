@@ -1,5 +1,6 @@
 package com.example.darte.petroguide.presenter.dagger;
 
+import com.example.darte.petroguide.presenter.navigation.BottomSheetRouter;
 import com.example.darte.petroguide.presenter.navigation.SplashScreenRouter;
 import dagger.Module;
 import dagger.Provides;
@@ -29,5 +30,10 @@ public class NavigationModule {
     @Provides
     SplashScreenRouter provideSplashScreenRouter(Router router, NavigatorHolder navigatorHolder){
         return new SplashScreenRouter(router,navigatorHolder);
+    }
+
+    @Provides
+    BottomSheetRouter provideBottomSheetRouter(Router router, NavigatorHolder navigatorHolder){
+        return new BottomSheetRouter(router,navigatorHolder);
     }
 }

@@ -2,5 +2,5 @@
     <string name="app_name">PetroGuide</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="permission_warning">Доступ к геолокации нужен для работы карты</string>
+    <string name="permission_warning">Отказывая в доступе к геолокации вы ограничиваете функциональность приложения</string>
 </resources>

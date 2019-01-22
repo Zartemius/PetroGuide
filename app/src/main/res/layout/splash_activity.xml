@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#03032D"
-        tools:context=".presenter.presentation.splashscreen.SplashScreenActivity">
+        tools:context=".presenter.presentation.splashscreen.SplashScreen">
 
     <TextView
             android:layout_width="wrap_content"

@@ -1,16 +1,12 @@
 package com.example.darte.petroguide.presenter.presentation.mainscreen;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,13 +25,10 @@ import java.util.List;
 
 public class MainMapScreen extends Fragment implements OnMapReadyCallback,MainMapScreenView {
 
-    @Inject
-    MainMapPresenter mainMapPresenter;
+    @Inject MainMapPresenter mainMapPresenter;
     private GoogleMap mMap;
     private MapView mMapView;
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
-    private static final int REQ_CODE = 111;
-
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -61,9 +54,7 @@ public class MainMapScreen extends Fragment implements OnMapReadyCallback,MainMa
             mapViewBundle = savedInstanceState.getBundle(MAP_VIEW_BUNDLE_KEY);
         }
 
-
-        Log.i("MAP_INITIALIZATION","on_create_view");
-        initializeMap(view,mapViewBundle);
+        initializeMap(view, mapViewBundle);
 
         return view;
     }
@@ -107,7 +98,6 @@ public class MainMapScreen extends Fragment implements OnMapReadyCallback,MainMa
     }
 
     private void initializeMap(View view,Bundle mapViewBundle){
-        Log.i("MAP_INITIALIZATION","initialized");
         mMapView = view.findViewById(R.id.map_fragment__map_view);
         mMapView.onCreate(mapViewBundle);
         mMapView.getMapAsync(this);
@@ -117,16 +107,17 @@ public class MainMapScreen extends Fragment implements OnMapReadyCallback,MainMa
     public void onMapReady(GoogleMap googleMap) {
 
         mMap = googleMap;
+        CustomInfoWindow customInfoWindow = new CustomInfoWindow(getActivity());
+        mMap.setInfoWindowAdapter(customInfoWindow);
 
-        setMapCameraZoom();
-
+        mainMapPresenter.setMapCamera();
         mainMapPresenter.loadPlacesToMap();
 
-        /*try {
+        try {
             mMap.setMyLocationEnabled(true);
         }catch (SecurityException e){
-            requestPermission();
-        }*/
+            e.printStackTrace();
+        }
 
         //mMap.getUiSettings().setZoomControlsEnabled(true);
         //mMap.setMinZoomPreference(9);
@@ -185,7 +176,7 @@ public class MainMapScreen extends Fragment implements OnMapReadyCallback,MainMa
 
         Log.i("MAP_INITIALIZATION","map_created");
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(building));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(building));
     }
 
     private Bitmap convertImageToBitmap(int drawable){
@@ -199,12 +190,10 @@ public class MainMapScreen extends Fragment implements OnMapReadyCallback,MainMa
         return bitmap;
     }
 
-    private void setMapCameraZoom(){
-        CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(59.9386300,30.3141300));
-        CameraUpdate zoom = CameraUpdateFactory.zoomTo(6);
-
+    @Override
+    public void setMapCamera(LatLng coordinates, float zoom){
+        CameraUpdate center = CameraUpdateFactory.newLatLngZoom(coordinates,zoom);
         mMap.moveCamera(center);
-        mMap.animateCamera(zoom);
     }
 
 

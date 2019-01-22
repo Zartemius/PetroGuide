@@ -20,7 +20,7 @@
                 android:name="com.google.android.geo.API_KEY"
                 android:value="AIzaSyAC-ajiX-oizorQ9JGndslwu0VGm7Qu8Zk"/>
 
-        <activity android:name=".presenter.presentation.splashscreen.SplashScreenActivity"
+        <activity android:name=".presenter.presentation.splashscreen.SplashScreen"
                   android:theme="@style/SplashTheme"
                   android:noHistory="true">
             <intent-filter>

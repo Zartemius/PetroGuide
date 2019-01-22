@@ -2,6 +2,7 @@ package com.example.darte.petroguide.presenter.dagger;
 
 import com.example.darte.petroguide.presenter.domain.interactor.DbSynchronization;
 import com.example.darte.petroguide.presenter.domain.interactor.PlacesLoading;
+import com.example.darte.petroguide.presenter.navigation.BottomSheetRouter;
 import com.example.darte.petroguide.presenter.navigation.SplashScreenRouter;
 import com.example.darte.petroguide.presenter.presentation.mainscreen.BottomSheetPresenter;
 import com.example.darte.petroguide.presenter.presentation.mainscreen.MainMapPresenter;
@@ -30,8 +31,8 @@ class PresenterModule {
 
     @Singleton
     @Provides
-    BottomSheetPresenter provideBottomSheetPresenter(PlacesLoading placesLoading){
-        BottomSheetPresenter bottomSheetPresenter = new BottomSheetPresenter(placesLoading);
+    BottomSheetPresenter provideBottomSheetPresenter(PlacesLoading placesLoading, BottomSheetRouter bottomSheetRouter){
+        BottomSheetPresenter bottomSheetPresenter = new BottomSheetPresenter(placesLoading,bottomSheetRouter);
         return bottomSheetPresenter;
     }
 }

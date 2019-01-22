@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.example.darte.petroguide.R;
+import ru.terrakok.cicerone.Navigator;
+import ru.terrakok.cicerone.android.support.SupportAppNavigator;
 
 import javax.inject.Inject;
 
@@ -19,6 +21,7 @@ public class BottomSheet extends BottomSheetDialogFragment implements BottomShee
 
     @Inject BottomSheetPresenter mBottomSheetPresenter;
     private TextView mPlaceName;
+    //private Navigator mNavigator = new SupportAppNavigator(getActivity(),-1);
 
     @Nullable
     @Override
@@ -28,6 +31,7 @@ public class BottomSheet extends BottomSheetDialogFragment implements BottomShee
         getDialog().getWindow().setLayout(100, ViewGroup.LayoutParams.MATCH_PARENT);
 
         ((PGApplication) getActivity().getApplication()).getAppComponent().inject(this);
+
 
         mPlaceName = view.findViewById(R.id.bottom_sheet__place_name);
 

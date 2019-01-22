@@ -15,7 +15,7 @@ import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.android.support.SupportAppNavigator;
 import javax.inject.Inject;
 
-public class SplashScreenActivity extends AppCompatActivity implements SplashActivityView {
+public class SplashScreen extends AppCompatActivity implements SplashView {
 
     @Inject SplashScreenPresenter mSplashScreenPresenter;
     private Navigator mNavigator = new SupportAppNavigator(this,-1);
@@ -27,7 +27,6 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashAct
         ((PGApplication) getApplication()).getAppComponent().inject(this);
         checkPermissionForGettingUserLocation();
     }
-
 
     @Override
     protected void onResume() {
@@ -43,7 +42,7 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashAct
         super.onPause();
     }
 
-    public void checkPermissionForGettingUserLocation() {
+    private void checkPermissionForGettingUserLocation() {
         if (ContextCompat.checkSelfPermission(
                     this,
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -56,12 +55,10 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashAct
     private void requestPermission(){
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION},111);
-
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
         if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
             mSplashScreenPresenter.updateDataInDbAndGetToTheNextScreen();
         }else{
@@ -71,7 +68,8 @@ public class SplashScreenActivity extends AppCompatActivity implements SplashAct
         }
     }
 
-    public void handlePermissionDenied(){
+    private void handlePermissionDenied(){
+
         boolean userWantsToBeAskedAboutPermissionAgain = ActivityCompat
                 .shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_FINE_LOCATION);
 

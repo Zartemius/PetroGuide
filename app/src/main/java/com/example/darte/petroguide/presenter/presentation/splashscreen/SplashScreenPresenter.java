@@ -16,7 +16,7 @@ import java.util.List;
 public class SplashScreenPresenter {
 
     private DbSynchronization mDbSynchronization;
-    private SplashActivityView mSplashActivityView = null;
+    private SplashView mSplashView = null;
     private Disposable mDisposable;
     private SplashScreenRouter mSplashScreenRouter;
 
@@ -26,12 +26,12 @@ public class SplashScreenPresenter {
         mSplashScreenRouter = splashScreenRouter;
     }
 
-    void subscribe(SplashActivityView splashActivityView) {
-        mSplashActivityView = splashActivityView;
+    void subscribe(SplashView splashView) {
+        mSplashView = splashView;
     }
 
     void unsubscribe() {
-        mSplashActivityView = null;
+        mSplashView = null;
         if(mDisposable != null) {
             mDisposable.dispose();
         }
