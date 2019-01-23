@@ -18,21 +18,25 @@ public class NavigationModule {
     }
 
     @Provides
+    @Singleton
     Router provideRouter(){
         return cicerone.getRouter();
     }
 
     @Provides
+    @Singleton
     NavigatorHolder provideNavigationHolder(){
         return cicerone.getNavigatorHolder();
     }
 
     @Provides
+    @Singleton
     SplashScreenRouter provideSplashScreenRouter(Router router, NavigatorHolder navigatorHolder){
         return new SplashScreenRouter(router,navigatorHolder);
     }
 
     @Provides
+    @Singleton
     BottomSheetRouter provideBottomSheetRouter(Router router, NavigatorHolder navigatorHolder){
         return new BottomSheetRouter(router,navigatorHolder);
     }

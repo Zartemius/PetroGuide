@@ -9,7 +9,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import ru.terrakok.cicerone.Navigator;
-
 import javax.inject.Inject;
 
 public class BottomSheetPresenter {
@@ -26,25 +25,30 @@ public class BottomSheetPresenter {
     }
 
     void subscribe(BottomSheetView bottomSheetView){
-        Log.i("BOTTOM_VIEW","result subscribed");
         mBottomSheetView = bottomSheetView;
-        Log.i("BOTTOM_VIEW","result subscribed object" + mBottomSheetView.toString());
-
     }
 
     void unsubscribe(){
         mBottomSheetView = null;
-        Log.i("BOTTOM_VIEW","result unsubscribed");
         if(mDisposable != null) {
             mDisposable.dispose();
         }
     }
 
-    public void setNavigator(Navigator navigator){
+    void navigateForward(){
+        String placeId = mBottomSheetView.getPlaceId();
+        mBottomSheetRouter.navigateForward(placeId);
+    }
+
+    public void navigateBack(){
+        mBottomSheetRouter.navigateBack();
+    }
+
+    void setNavigator(Navigator navigator){
         mBottomSheetRouter.setNavigator(navigator);
     }
 
-    public void removeNavigator(){
+    void removeNavigator(){
         mBottomSheetRouter.removeNavigator();
     }
 

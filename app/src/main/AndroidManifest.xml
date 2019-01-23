@@ -32,6 +32,11 @@
         <activity android:name=".presenter.presentation.menu.MenuActivity"
                   android:theme="@style/AppThemeTranslucentStatus">
         </activity>
+
+        <activity android:name=".presenter.presentation.placescreen.PlaceScreen"
+                  android:theme="@style/PlaceScreenTheme">
+
+        </activity>
     </application>
 
 </manifest>

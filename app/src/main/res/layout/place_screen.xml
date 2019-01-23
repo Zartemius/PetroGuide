@@ -2,10 +2,25 @@
 
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:layout_width="match_parent"
+        android:fitsSystemWindows="true"
         android:layout_height="match_parent">
 
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/app_bar_menu__toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@color/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:title="История места"
+            app:titleTextColor="@color/white"/>
 
+    <FrameLayout
+            android:id="@+id/place_screen__fragments"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+    </FrameLayout>
 
 </LinearLayout>

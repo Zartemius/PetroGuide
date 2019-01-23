@@ -4,7 +4,7 @@ import ru.terrakok.cicerone.Navigator;
 import ru.terrakok.cicerone.NavigatorHolder;
 import ru.terrakok.cicerone.Router;
 
-public class BottomSheetRouter implements SmartRouter {
+public class BottomSheetRouter {
 
     private Router mRouter;
     private NavigatorHolder mNavigationHolder;
@@ -14,22 +14,18 @@ public class BottomSheetRouter implements SmartRouter {
         mNavigationHolder = navigatorHolder;
     }
 
-    @Override
-    public void navigateForward() {
-        mRouter.navigateTo(new Screens.PlaceScreenFragment());
+    public void navigateForward(String id) {
+        mRouter.navigateTo(new Screens.PlaceScreenInstance(id));
     }
 
-    @Override
     public void navigateBack() {
         mRouter.finishChain();
     }
 
-    @Override
     public void setNavigator(Navigator navigator) {
         mNavigationHolder.setNavigator(navigator);
     }
 
-    @Override
     public void removeNavigator() {
         mNavigationHolder.removeNavigator();
     }

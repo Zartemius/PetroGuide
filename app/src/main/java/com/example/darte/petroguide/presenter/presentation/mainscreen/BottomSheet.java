@@ -1,7 +1,7 @@
 package com.example.darte.petroguide.presenter.presentation.mainscreen;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,7 +21,8 @@ public class BottomSheet extends BottomSheetDialogFragment implements BottomShee
 
     @Inject BottomSheetPresenter mBottomSheetPresenter;
     private TextView mPlaceName;
-    //private Navigator mNavigator = new SupportAppNavigator(getActivity(),-1);
+    private Navigator mNavigator;
+    private Button buttonLearnMore;
 
     @Nullable
     @Override
@@ -32,6 +33,7 @@ public class BottomSheet extends BottomSheetDialogFragment implements BottomShee
 
         ((PGApplication) getActivity().getApplication()).getAppComponent().inject(this);
 
+        buttonLearnMore = view.findViewById(R.id.bottom_sheet__button_learnMore);
 
         mPlaceName = view.findViewById(R.id.bottom_sheet__place_name);
 
@@ -41,19 +43,25 @@ public class BottomSheet extends BottomSheetDialogFragment implements BottomShee
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mNavigator = new SupportAppNavigator(getActivity(),-1);
+
+        buttonLearnMore.setOnClickListener(this::clicked);
     }
+
 
     @Override
     public void onResume() {
         super.onResume();
         mBottomSheetPresenter.subscribe(this);
         mBottomSheetPresenter.displayInformationAboutPlace();
+        mBottomSheetPresenter.setNavigator(mNavigator);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         mBottomSheetPresenter.unsubscribe();
+        mBottomSheetPresenter.removeNavigator();
     }
 
     @Override
@@ -67,4 +75,10 @@ public class BottomSheet extends BottomSheetDialogFragment implements BottomShee
     public void displayInfoAboutThePlace(Place place) {
         mPlaceName.setText(place.getName());
     }
+
+    private void clicked(View view){
+        mBottomSheetPresenter.navigateForward();
+    }
+
+
 }
