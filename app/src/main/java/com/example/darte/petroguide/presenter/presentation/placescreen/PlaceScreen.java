@@ -9,18 +9,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import com.example.darte.petroguide.R;
 import com.example.darte.petroguide.presenter.constants.DataPassedBetweenActivities;
-import com.example.darte.petroguide.presenter.presentation.mainscreen.BottomSheet;
 
 public class PlaceScreen extends AppCompatActivity {
-
-    private Toolbar toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.place_screen);
 
-        toolbar = findViewById(R.id.app_bar_menu__toolbar);
+        Toolbar toolbar = findViewById(R.id.app_bar_menu__toolbar);
 
         setSupportActionBar(toolbar);
 
@@ -28,22 +25,21 @@ public class PlaceScreen extends AppCompatActivity {
     }
 
     public void createFragment(Fragment newFragment){
-        setData();
+        setData(newFragment);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.place_screen__fragments,newFragment);
         ft.commit();
     }
 
-    private void setData(){
+    private void setData(Fragment newFragment){
 
         Intent i = getIntent();
         String dataKey = DataPassedBetweenActivities.placeId;
         String placeId = i.getStringExtra(dataKey);
 
-        PlaceDescriptionScreen placeDescriptionScreen = new PlaceDescriptionScreen();
+        Fragment targetFragment = newFragment;
         Bundle placeData = new Bundle();
         placeData.putString("placeId",placeId);
-        placeDescriptionScreen.setArguments(placeData);
+        targetFragment.setArguments(placeData);
     }
-
 }
